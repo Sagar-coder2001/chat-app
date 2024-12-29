@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, FlatList, TouchableOpacity, Image } from 'react-native';
 import { getDatabase, ref, push, set, onChildAdded, query, orderByChild, equalTo } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,7 +24,7 @@ const Opentext = () => {
                 // const sname = await AsyncStorage.getItem('senderName');
                 const suid = await AsyncStorage.getItem('senderUid');
 
-                if (name && uid  && suid) {
+                if (name && uid && suid) {
                     setReceiverName(name);
                     setReceiverUid(uid);
                     // setSenderName(sname);
@@ -104,24 +104,31 @@ const Opentext = () => {
                     </View>
                 )}
 
-                
+
                 keyExtractor={(item, index) => index.toString()}
-                // Removed inverted to prevent UI issues
+            // Removed inverted to prevent UI issues
             />
             <View style={styles.sendmsg}>
-            <TextInput
-                style={styles.input}
-                value={messageText}
-                onChangeText={setMessageText}
-                placeholder="Type a message..."
-            />
-            <TouchableOpacity
-                style={[styles.sendbtn, (!receiverUid || !messageText.trim()) && styles.disabled]}
-                onPress={sendMessage}
-                disabled={!receiverUid || !messageText.trim()}
-            >
-                <Text style={styles.sendText}>Send</Text>
-            </TouchableOpacity>
+                <TextInput
+                    style={styles.input}
+                    value={messageText}
+                    onChangeText={setMessageText}
+                    placeholder="Type a message..."
+                    placeholderTextColor="#FFFFFF"
+                />
+                <TouchableOpacity
+                    style={[styles.sendbtn, (!receiverUid || !messageText.trim()) && styles.disabled]}
+                    onPress={sendMessage}
+                    disabled={!receiverUid || !messageText.trim()}
+                >
+                    <View>
+                    <Image
+                        source={require('../assets/images/send.jpg')}
+                        style={styles.sendimg}
+
+                    />
+                    </View>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -137,7 +144,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 10,
-        color:'#fff'
+        color: '#fff'
     },
     message: {
         padding: 10,
@@ -153,34 +160,33 @@ const styles = StyleSheet.create({
         backgroundColor: '#e0e0e0',
     },
     input: {
-        flex: 1,               // Make the TextInput take up available space
-        height: 40,
+        flex: 1,
+        
         borderColor: '#000',
         borderWidth: 0,
-        paddingLeft: 10,
+        padding: 20,
         color: '#fff',         // Text color
         placeholderTextColor: '#fff', // Placeholder color
-        marginRight: 10,  
+        marginRight: 10,
         boxShadow: '0px 0px 3px white inset',
         color: '#fff',
-        borderRadius:3
+        borderRadius: 25,
+        padding: 12,
+        backgroundColor: 'rgb(59, 82, 60)',
+        boxShadow: '0px 0px 2px inset'
     },
-    sendmsg : {
+    sendmsg: {
         flexDirection: 'row',  // Arrange children (TextInput and Button) horizontally
         alignItems: 'center',  // Vertically align them in the center
-        marginBottom: 10, 
-        width:'100%'
+        marginBottom: 10,
+        width: '100%'
     },
-    sendbtn: {
-        width: 60,  // Button width
-        height: 40,  // Button height
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#519872',  // Button background color
-        borderRadius: 5,  // Rounded corners
-    },
-    disabled: {
-        backgroundColor: '#BDBDBD',  // Gray background when disabled
-    },
+    sendimg :{
+        width : 40,
+        height:40,
+        borderRadius:50,
+        boxShadow:'0px 0px 8px'
+
+    }
 });
 export default Opentext;

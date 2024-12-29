@@ -22,7 +22,6 @@ const Main = () => {
                 email: user.email,
                 uid: user.uid,
             });
-
             // Fetch all users from Firebase Realtime Database
             const db = getDatabase(app);
             const usersRef = ref(db, 'users'); // Reference to 'users' node
@@ -43,6 +42,7 @@ const Main = () => {
                         }
                     }
                     setAllUsers(users); // Set all users' data
+
                     setFilteredUsers(users); // Initially, set filtered users to all users
                 } else {
                     console.log("No users found in the database.");
@@ -53,6 +53,7 @@ const Main = () => {
         }
     }, []);
 
+
     // Navigate to the Opentext screen with receiver's UID and name
     const openSingleScreen = async (receiverUid, receiverName) => {
         try {
@@ -60,6 +61,8 @@ const Main = () => {
             await AsyncStorage.setItem('receiverName', receiverName);
             await AsyncStorage.setItem('receiverUid', receiverUid);
             await AsyncStorage.setItem('senderUid', loggedInUser.uid);
+            await AsyncStorage.setItem('senderemail', loggedInUser.email);
+
 
             // Navigate to the Opentext screen
             router.push('Opentext');
@@ -76,6 +79,10 @@ const Main = () => {
         setFilteredUsers(filtered); // Update the filtered users list
     };
 
+    const openprofile = () => {
+        router.push('UserProfile');
+    }
+
     return (
         <>
             {loggedInUser && (
@@ -83,9 +90,16 @@ const Main = () => {
                     <TextInput
                         style={styles.textInput}
                         placeholder="Search People"
+                         placeholderTextColor="#FFFFFF"
                         onChangeText={filtername} // Directly pass the text to filtername
                     />
-                    <Image source={require('../assets/images/logo.png')} style={styles.logoimg} />
+                    <TouchableOpacity onPress={openprofile} style={styles.imageContainer}>
+                        <Image
+                            source={require('../assets/images/images.png')}
+                            style={styles.logoimg}
+                       
+                        />
+                    </TouchableOpacity>
                 </View>
             )}
 
@@ -95,13 +109,23 @@ const Main = () => {
                     <Text style={styles.header}>All Users</Text>
                     {filteredUsers.length > 0 ? (
                         filteredUsers.map((user) => (
-                            <TouchableOpacity
-                                key={user.uid}
-                                style={styles.userItem}
-                                onPress={() => openSingleScreen(user.uid, user.name)}
-                            >
-                                <Text style={styles.userName}>{user.name}</Text>
-                            </TouchableOpacity>
+                            <View>
+                                <TouchableOpacity
+                                    key={user.uid}
+                                    style={styles.userItem}
+                                    onPress={() => openSingleScreen(user.uid, user.name)}
+                                >
+                                    <View style={styles.logoAndNameContainer}>
+                                        <Image
+                                            source={require('../assets/images/images.png')}
+                                            style={styles.logoimg}
+                                        />
+                                        <Text style={styles.userName}>{user.name}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+
+
                         ))
                     ) : (
                         <Text style={styles.noUsersText}>No users available.</Text>
@@ -141,7 +165,7 @@ const styles = StyleSheet.create({
         height: 40,
         borderColor: '#ccc',
         borderWidth: 1,
-        borderRadius: 5,
+        borderRadius: 25,
         paddingLeft: 10,
         marginLeft: 5,
         color: '#fff',
@@ -160,6 +184,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgb(59, 82, 60)',
         borderRadius: 8,
         marginBottom: 10,
+        borderRadius:25,
+        boxShadow:'0px 0px 2px inset'
+
     },
     noUsersText: {
         fontSize: 18,
@@ -170,6 +197,18 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         marginLeft: 10,
+    },
+    logoAndNameContainer: {
+        flexDirection: 'row',  // Aligns children (logo and name) horizontally
+        alignItems: 'center',  // Vertically center them
+        paddingHorizontal: 10,  // Optional, adjust as necessary
+    },
+    logoimg: {
+        width: 30,  // Set the width of your logo
+        height: 30, // Set the height of your logo
+        marginRight: 10,  // Space between the logo and the text
+        borderRadius:50,
+        marginLeft:5
     },
 });
 

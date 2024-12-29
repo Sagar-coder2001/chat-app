@@ -1,4 +1,4 @@
-import { useFonts } from 'expo-font';
+import { useFonts} from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Button } from 'react-native';
@@ -20,17 +20,28 @@ export default function RootLayout() {
   return (
     <View style={{ flex: 1 }}>
       <StatusBar
-        translucent={true} 
-        style="light" 
+        translucent={true}
+        style="light"
         backgroundColor='#3B5249'
       />
 
       <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="index"
+          options={{
+            headerShown: false,
+            headerStyle: {
+              backgroundColor: 'lightblue', // Set header background color here
+            },
+          }}
+        />
 
-        <Stack.Screen name="main" options={{ headerShown: false }}  />
-           
+        <Stack.Screen name="main" options={{ headerShown: false }} />
+
         <Stack.Screen name="opentext" options={{ headerShown: false }} />
+
+        <Stack.Screen name="UserProfile" options={{ headerShown: false }} />
+
       </Stack>
     </View>
   );

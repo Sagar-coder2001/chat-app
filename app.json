@@ -10,15 +10,20 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "package": "com.chat app" 
+      "package": "com.chat app"
     },
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff",
-        "package": "com.chat app" 
-      }
+        "package": "com.chat app"
+      },
+      "package": "com.saagar_coder.myapp"
     },
     "web": {
       "bundler": "metro",
@@ -39,6 +44,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "4fff86bb-d175-4113-8143-161b6db424a0"
+      }
     }
   }
 }
