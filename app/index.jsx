@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert, Button, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { auth } from './Firebaseconfig'; // Importing auth from your Firebase configuration
 import { signInWithEmailAndPassword } from 'firebase/auth'; // Firebase Authentication method
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Index() {
   const [email, setEmail] = useState('');
@@ -11,6 +12,10 @@ export default function Index() {
   const [passwordErr, setPasswordErr] = useState('');
   const router = useRouter();
   const [showerr, setShowerr] = useState('');
+
+  useEffect(() => {
+
+  })
 
   const handleLogin = async () => {
     // Clear any previous errors
@@ -38,11 +43,11 @@ export default function Index() {
 
     try {
       // Use Firebase Authentication to sign in
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password);
 
       // If login is successful, navigate to the main screen
       // Alert.alert('Success', 'Logged in successfully!');
-      router.push('/Main'); // Redirect to the Main screen
+     router.replace('/Main');
 
       // Optionally, you can reset the form fields after successful login
       setEmail('');
@@ -65,20 +70,7 @@ export default function Index() {
 
   return (
     <View style={styles.container}>
-
-      {
-        showerr && (
-          <>
-            <View style={styles.showerr}>
-              <Text style={styles.errorText}> Error ! {showerr}</Text>
-              <Text style={styles.showerrrbtn} title="OK" onPress={() => setShowerr('')} >ok</Text>
-            </View>
-          </>
-        )
-      }
-
-      {
-        !showerr && (
+ 
           <>
             <Text style={styles.title}>Login</Text>
             <TouchableOpacity>
@@ -116,9 +108,7 @@ export default function Index() {
             </TouchableOpacity>
           
           </>
-        )
-      }
-
+        
     </View>
   );
 }
@@ -127,7 +117,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
     backgroundColor: '#3B5249',
     padding: 20,
     color: 'white'
@@ -137,7 +127,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     color: '#333',
-    color: 'white'
+    color: 'white',
+    textAlign:'center'
   },
   input: {
     width: '100%',
@@ -170,33 +161,24 @@ const styles = StyleSheet.create({
     color: '#4caf50',
     fontSize: 16,
     marginBottom:'10',
+    textAlign:'right',
+
   },
   signupPrompt: {
     paddingBottom: 20,
-    color: 'white'
+    color: 'white',
+    textAlign:'center'
     
   },
   signupbtn: {
     fontSize: 18,
     color: '#4caf50',
   },
+
   errorText: {
-    color:'#fff'
-  },
-  showerr: {
-    backgroundColor: '#f8d7da', 
-    padding: 20,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#f5c6cb', 
-    width: '80%', 
-    alignItems: 'center', 
-  },
-  errorText: {
-    color: '#721c24', 
+    color: '#ff0a1b', 
     fontSize: 16,
-    marginBottom: 20, 
-    textAlign: 'center',
+    marginBottom: 5, 
   },
   showerrrbtn: {
     backgroundColor: '#519872',

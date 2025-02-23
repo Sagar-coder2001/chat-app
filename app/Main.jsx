@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ActivityIndicator } from 'react-native';
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 import { useRouter } from 'expo-router';
@@ -10,12 +10,13 @@ const Main = () => {
     const [loggedInUser, setLoggedInUser] = useState(null); // To store logged-in user data
     const [allUsers, setAllUsers] = useState([]); // To store list of all users
     const [filteredUsers, setFilteredUsers] = useState([]); // To store filtered users based on search
+    const [loading, setLoading] = useState(true)
     const router = useRouter();
+
 
     useEffect(() => {
         const auth = getAuth();
         const user = auth.currentUser;
-
         if (user) {
             setLoggedInUser({
                 name: user.displayName, // Use displayName or any field
@@ -44,12 +45,17 @@ const Main = () => {
                     setAllUsers(users); // Set all users' data
 
                     setFilteredUsers(users); // Initially, set filtered users to all users
-                } else {
+                    setLoading(false);
+                }
+                else {
                     console.log("No users found in the database.");
+                    setLoading(false);
                 }
             });
         } else {
             console.log("No logged-in user found.");
+            setLoading(false);
+
         }
     }, []);
 
@@ -62,8 +68,6 @@ const Main = () => {
             await AsyncStorage.setItem('receiverUid', receiverUid);
             await AsyncStorage.setItem('senderUid', loggedInUser.uid);
             await AsyncStorage.setItem('senderemail', loggedInUser.email);
-
-
             // Navigate to the Opentext screen
             router.push('Opentext');
         } catch (error) {
@@ -95,7 +99,7 @@ const Main = () => {
                     />
                     <TouchableOpacity onPress={openprofile} style={styles.imageContainer}>
                         <Image
-                            source={require('../assets/images/images.png')}
+                            source={require('../assets/images/7915471.png')}
                             style={styles.logoimg}
                        
                         />
@@ -104,9 +108,16 @@ const Main = () => {
             )}
 
             <View style={styles.container}>
+
+                {
+                    loading && (
+                        <>
+                         <ActivityIndicator size="large" color="#FFFFFF" />
+                        </>
+                    )
+                }
                 {/* Display the list of all users' names */}
                 <View style={styles.usersContainer}>
-                    <Text style={styles.header}>All Users</Text>
                     {filteredUsers.length > 0 ? (
                         filteredUsers.map((user) => (
                             <View>
@@ -142,12 +153,6 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#3B5249',
     },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 10,
-        color: '#fff',
-    },
     userDetailsContainer: {
         marginBottom: 0,
         padding: 0,
@@ -176,9 +181,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         backgroundColor: 'rgb(59, 82, 60)',
     },
-    usersContainer: {
-        marginTop: 20,
-    },
     userItem: {
         padding: 10,
         backgroundColor: 'rgb(59, 82, 60)',
@@ -197,6 +199,7 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         marginLeft: 10,
+        color:'white'
     },
     logoAndNameContainer: {
         flexDirection: 'row',  // Aligns children (logo and name) horizontally

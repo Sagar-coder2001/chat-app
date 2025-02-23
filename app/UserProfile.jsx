@@ -1,6 +1,7 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const UserProfile = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -32,13 +33,17 @@ const UserProfile = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Header Section */}
-      <View style={styles.header}>
-        <Image
-          source={require('../assets/images/logo.png')}
-          style={styles.profileImage}
-        />
+      <View style={styles.header}> 
+  
+          <Image
+            source={require('../assets/images/logo.png')}
+            style={styles.profileImage}
+          />
+
         <Text style={styles.userEmail}>{email || 'Loading...'}</Text>
       </View>
+
+
 
 
       {/* Options Section */}
@@ -74,7 +79,7 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Center items vertically
     justifyContent: 'space-between', // Space between image and email
     width: '100%', // Take full width of the container
-    marginTop: 40, // Add spacing below the header
+    marginTop: 0, // Add spacing below the header
     paddingHorizontal: 10, // Add horizontal padding
     borderBottomWidth:1,
     padding:15,
